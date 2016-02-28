@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.0"
+   width="68.000000pt"
+   height="68.000000pt"
+   viewBox="0 0 68.000000 68.000000"
+   preserveAspectRatio="xMidYMid meet"
+   id="svg2"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="colony.svg"
+   inkscape:export-filename="colony.png"
+   inkscape:export-xdpi="139.75879"
+   inkscape:export-ydpi="139.75879">
+  <defs
+     id="defs12" />
+  <sodipodi:namedview
+     pagecolor="#ff0000"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="1"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1915"
+     inkscape:window-height="914"
+     id="namedview10"
+     showgrid="false"
+     inkscape:zoom="2.7764706"
+     inkscape:cx="-126.59958"
+     inkscape:cy="25.391949"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2" />
+
+  <circle
+     style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:3.816;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="circle"
+     cx="34"
+     cy="34"
+     r="32.093441" />
+  <g
+     transform="matrix(0.1,0,0,-0.1,-0.02454418,67.914689)"
+     id="colony_wings"
+     style="fill:#000000;stroke:none">
+    <path
+       d="m 237,666 c -50,-18 -78,-45 -106,-102 -26,-52 -35,-53 -21,-4 5,19 8,35 6,37 -2,3 -23,-22 -46,-54 -42,-59 -46,-82 -24,-150 4,-13 1,-12 -14,6 L 12,423 5,383 C -3,332 13,244 40,191 79,113 160,40 225,24 c 25,-6 26,-5 16,14 -19,35 -12,36 21,3 40,-39 59,-45 115,-36 44,6 45,7 26,27 -18,21 -18,21 2,14 51,-19 73,-18 111,7 22,13 48,34 58,46 19,21 19,21 -10,21 -28,1 -27,2 17,25 59,31 66,40 85,118 12,47 14,82 9,124 l -8,58 -12,-53 C 638,319 593,251 536,213 494,184 479,180 423,180 c -61,0 -67,2 -99,34 -43,43 -47,94 -9,131 27,28 37,30 66,15 32,-17 24,26 -8,47 -16,10 -31,22 -34,26 -4,5 -26,11 -50,14 -38,4 -49,1 -83,-26 -21,-17 -42,-31 -46,-31 -12,0 8,76 30,119 44,87 128,133 239,133 l 75,0 -35,15 c -48,22 -184,27 -232,9 z"
+       id="path8"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>
