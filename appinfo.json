@@ -12,14 +12,19 @@
     "longName": "Colony",
     "projectType": "native",
     "resources": {
-        "media": []
+        "media": [
+            {
+                "file": "images/colony.png",
+                "name": "COLONY_LOGO",
+                "targetPlatforms": null,
+                "type": "bitmap"
+            }
+        ]
     },
     "sdkVersion": "3",
     "shortName": "Colony",
     "targetPlatforms": [
-        "aplite",
-        "basalt",
-        "chalk"
+        "basalt"
     ],
     "uuid": "667fc060-d995-4eb5-bbe5-eb92aa3e4799",
     "versionLabel": "0.1",
