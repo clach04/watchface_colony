@@ -9,19 +9,19 @@
     ],
     "companyName": "clach04",
     "enableMultiJS": true,
-    "longName": "FILL ME IN!",
+    "longName": "Colony",
     "projectType": "native",
     "resources": {
         "media": []
     },
     "sdkVersion": "3",
-    "shortName": "FILL ME IN!",
+    "shortName": "Colony",
     "targetPlatforms": [
         "aplite",
         "basalt",
         "chalk"
     ],
-    "uuid": "33a003e9-91ec-40fe-b652-b41248212f74",
+    "uuid": "667fc060-d995-4eb5-bbe5-eb92aa3e4799",
     "versionLabel": "0.1",
     "watchapp": {
         "watchface": true
