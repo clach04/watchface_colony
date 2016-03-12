@@ -26,6 +26,10 @@
 //#define DRAW_SMALL_BATTERY
 #define NO_DATE
 
+#ifdef PBL_COLOR
+    #define DEFAULT_BACKGROUND_COLOR GColorRed
+#endif /* PBL_COLOR */
+
 #ifdef PBL_ROUND /* 180x180 */
     /* TODO */
 #else /* PBL_RECT 144x168*/
