@@ -41,7 +41,7 @@
     #define BT_POS GRect(0, 120, 144, 168) /* probably taller than really needed */
     #define DATE_POS GRect(0, 0, 144, 168) /* probably taller than really needed */
     #ifdef DRAW_BATTERY
-        #define BAT_POS GRect(5, 5, 144, 168)
+        #define BAT_POS GRect(3, 3, 144, 168)
     #else
         #define BAT_POS GRect(0, 0, 144, 168) /* probably taller than really needed */
     #endif /* DRAW_BATTERY */
