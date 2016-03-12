@@ -58,7 +58,11 @@
     //#define BT_DISCONNECT_IMAGE_GRECT GRect(144 - 20, 138, 20, 30)
     #define BT_DISCONNECT_IMAGE_GRECT GRect(144 - 20, 168 - (2 * 30 + 4), 20, 30)
 
-    #define BT_POS GRect(0, 110, 144, 168) /* probably taller than really needed */
+    #define BLUETOOTH_DISCONNECTED_STR "No BT"
+    #define BT_ALIGN GTextAlignmentRight
+    #define BT_POS GRect(0, 0, 144, 168) /* probably taller than really needed */
+    //#define BT_POS GRect(0, 110, 144, 168) /* probably taller than really needed */
+
     #define DATE_POS GRect(0, 0, 144, 168) /* probably taller than really needed */
     #ifdef DRAW_BATTERY
         #define BAT_POS GRect(3, 3, 144, 168)
