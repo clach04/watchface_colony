@@ -24,6 +24,7 @@
 
 #define DRAW_BATTERY
 //#define DRAW_SMALL_BATTERY
+#define NO_DATE
 
 #ifdef PBL_ROUND /* 180x180 */
     /* TODO */
