@@ -31,7 +31,8 @@
     "sdkVersion": "3",
     "shortName": "Colony",
     "targetPlatforms": [
-        "basalt"
+        "basalt",
+        "chalk"
     ],
     "uuid": "667fc060-d995-4eb5-bbe5-eb92aa3e4799",
     "versionLabel": "0.1",
