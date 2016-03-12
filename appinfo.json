@@ -31,6 +31,7 @@
     "sdkVersion": "3",
     "shortName": "Colony",
     "targetPlatforms": [
+        "aplite",
         "basalt",
         "chalk"
     ],
