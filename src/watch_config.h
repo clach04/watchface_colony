@@ -19,7 +19,7 @@
 
 #define DATE_FMT_STR "%a\n%b\n%d"  /* TODO review %d for day */
 #define MAX_DATE_STR "Thu\n00\nAug"  /* if custom version of DATE_FMT_STR is set, MAX_DATE_STR  needs to be updated too */
-#define NO_DATE
+//#define NO_DATE
 
 #define DRAW_BATTERY
 //#define DRAW_SMALL_BATTERY
@@ -54,7 +54,7 @@
     #define IMAGE_RES_X 132  /* NOTE if image res changes - this needs to change too! */
     #define IMAGE_RES_Y 132  /* NOTE if image res changes - this needs to change too! */
     /* Image at top of screen, centered horizontally */
-    #define BG_IMAGE_GRECT GRect((144 - IMAGE_RES_X) / 2, 0,  IMAGE_RES_X, IMAGE_RES_Y)  // use same size as image. On Aplite can determine this at runtime but not Basalt
+    #define BG_IMAGE_GRECT GRect((144 - IMAGE_RES_X) / 2, 5,  IMAGE_RES_X, IMAGE_RES_Y)  // use same size as image. On Aplite can determine this at runtime but not Basalt
 
     //#define CLOCK_POS GRect(0, 136, 144, 168) /* bottom of screen for FONT_KEY_BITHAM_30_BLACK */
     #define CLOCK_POS GRect(0, 118, 144, 168) /* bottom of screen for FONT_KEY_ROBOTO_BOLD_SUBSET_49 with one pixel border on bottom */
@@ -69,7 +69,7 @@
 
     #define DATE_POS GRect(0, -5, 144, 168) /* probably taller than really needed */
     #ifdef DRAW_BATTERY
-        #define BAT_POS GRect(3, 3, 144, 168)
+        #define BAT_POS GRect(8, 8, 144, 168)
     #else
         #define BAT_POS GRect(0, 0, 144, 168) /* probably taller than really needed */
     #endif /* DRAW_BATTERY */
