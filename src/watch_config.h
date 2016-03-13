@@ -47,7 +47,7 @@
     #endif /* BT_DISCONNECT_IMAGE */
 
     #define CLOCK_POS GRect(0, 105, 180, 180) /* bottom of screen for FONT_KEY_ROBOTO_BOLD_SUBSET_49 with one pixel border on bottom */
-    #define DATE_POS GRect(0, 0, 144, 168) /* probably taller than really needed */
+    #define DATE_POS GRect(0, 20, 144, 168) /* probably taller than really needed */
 
     #define DEFAULT_TIME_COLOR GColorRed
 #else /* PBL_RECT 144x168*/
