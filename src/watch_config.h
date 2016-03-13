@@ -76,6 +76,6 @@
 #endif /* end of Round or rectangle */
 
 /* for screen shots and font testing
- */
 #define DEBUG_TIME
 #define DEBUG_TIME_SCREENSHOT
+ */
