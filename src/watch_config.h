@@ -28,6 +28,8 @@
     #define DEFAULT_BACKGROUND_COLOR GColorRed
 #endif /* PBL_COLOR */
 
+#define BT_DISCONNECT_IMAGE RESOURCE_ID_IMAGE_BT_DISCONNECT
+
 #ifdef PBL_ROUND /* 180x180 */
     #define IMAGE_RES_X 180  /* NOTE if image res changes - this needs to change too! */
     #define IMAGE_RES_Y 180  /* NOTE if image res changes - this needs to change too! */
@@ -35,12 +37,14 @@
     #define BG_IMAGE_GRECT GRect((180 - IMAGE_RES_X) / 2, 0,  IMAGE_RES_X, IMAGE_RES_Y)  // use same size as image. On Aplite can determine this at runtime but not Basalt
 
     #define BAT_POS GRect(30, 90, 144, 168)
-    #define BT_DISCONNECT_IMAGE_GRECT GRect(50, 90, 144, 168)
     //#define BT_POS GRect(0, 60, 180, 180) /* probably taller than really needed */
     #define BLUETOOTH_DISCONNECTED_STR "No BT"
     #define BT_ALIGN GTextAlignmentLeft
     //#define BT_POS GRect(0, 60, 180, 180) /* probably taller than really needed */
     #define BT_POS GRect(57, 62, 180, 180) /* probably taller than really needed */
+    #ifdef BT_DISCONNECT_IMAGE
+        #define BT_DISCONNECT_IMAGE_GRECT GRect(57, 62, 22, 22)
+    #endif /* BT_DISCONNECT_IMAGE */
 
     #define CLOCK_POS GRect(0, 105, 180, 180) /* bottom of screen for FONT_KEY_ROBOTO_BOLD_SUBSET_49 with one pixel border on bottom */
     #define DATE_POS GRect(0, 0, 144, 168) /* probably taller than really needed */
