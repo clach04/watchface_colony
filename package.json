@@ -1,6 +1,8 @@
 {
     "author": "clach04",
-    "dependencies": {},
+    "dependencies": {
+        "pebble-clay": "^1.0.1"
+    },
     "keywords": [],
     "name": "colony",
     "pebble": {
@@ -9,11 +11,12 @@
         ],
         "displayName": "Colony",
         "enableMultiJS": true,
-        "messageKeys": {
-            "KEY_BACKGROUND_COLOR": 2,
-            "KEY_TIME_COLOR": 0,
-            "KEY_VIBRATE_ON_DISCONNECT": 1
-        },
+        "messageKeys": [
+            "TIME_COLOR",
+            "VIBRATE_ON_DISCONNECT",
+            "BACKGROUND_COLOR",
+            "MAJOR_VERSION"
+        ],
         "projectType": "native",
         "resources": {
             "media": [
