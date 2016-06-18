@@ -1,0 +1,53 @@
+{
+    "author": "clach04",
+    "dependencies": {},
+    "keywords": [],
+    "name": "colony",
+    "pebble": {
+        "capabilities": [
+            "configurable"
+        ],
+        "displayName": "Colony",
+        "enableMultiJS": true,
+        "messageKeys": {
+            "KEY_BACKGROUND_COLOR": 2,
+            "KEY_TIME_COLOR": 0,
+            "KEY_VIBRATE_ON_DISCONNECT": 1
+        },
+        "projectType": "native",
+        "resources": {
+            "media": [
+                {
+                    "file": "images/round_bluetooth_disconnect.png",
+                    "name": "IMAGE_BT_DISCONNECT",
+                    "targetPlatforms": null,
+                    "type": "bitmap"
+                },
+                {
+                    "file": "images/icon_28x28.png",
+                    "menuIcon": true,
+                    "name": "IMAGE_ICON",
+                    "targetPlatforms": null,
+                    "type": "bitmap"
+                },
+                {
+                    "file": "images/colony.png",
+                    "name": "COLONY_LOGO",
+                    "targetPlatforms": null,
+                    "type": "bitmap"
+                }
+            ]
+        },
+        "sdkVersion": "3",
+        "targetPlatforms": [
+            "aplite",
+            "basalt",
+            "chalk"
+        ],
+        "uuid": "667fc060-d995-4eb5-bbe5-eb92aa3e4799",
+        "watchapp": {
+            "watchface": true
+        }
+    },
+    "version": "0.3.0"
+}
