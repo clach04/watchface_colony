@@ -17,7 +17,10 @@ extern const PebbleProcessInfo __pbl_app_info;  // ONLY for get_major_app_versio
 #endif /* PBL_BW */
 
 Window    *main_window=NULL;
+#ifndef NO_TEXT_TIME_LAYER
 TextLayer *time_layer=NULL;
+#endif /* NO_TEXT_TIME_LAYER */
+
 TextLayer *date_layer=NULL;
 #ifndef DRAW_BATTERY
 TextLayer *battery_layer=NULL;
@@ -148,8 +151,35 @@ void handle_bluetooth(bool connected)
         #endif /* BT_DISCONNECT_IMAGE */
         if (config_time_vib_on_disconnect && (bluetooth_state != connected))
         {
+            bool do_vib = true;
+
+            // check if quiet time
+            if (quiet_time_is_active())
+            {
+                do_vib = false;
+            }
+#ifdef USE_HEALTH
+            // check if asleep
+            if (do_vib)
+            {
+                HealthActivityMask activities = health_service_peek_current_activities();
+
+                if (activities & HealthActivitySleep)
+                {
+                    do_vib = false;
+                }
+                if (activities & HealthActivityRestfulSleep)
+                {
+                    do_vib = false;
+                }
+            }
+#endif // USE_HEALTH
+
             /* had BT connection then lost it, rather than started disconnected */
-            vibes_short_pulse();  /* vibrate/rumble */
+            if (do_vib)
+            {
+                vibes_short_pulse();  /* vibrate/rumble */
+            }
         }
     }
     bluetooth_state = connected;
@@ -206,14 +236,20 @@ static void health_handler(HealthEventType event, void *context)
         case HealthEventSleepUpdate:
             APP_LOG(APP_LOG_LEVEL_INFO, "New HealthService HealthEventSleepUpdate event");
             break;
-#ifdef PBL_PLATFORM_DIORITE  // FIXME replace with new equiv of PBL_SDK_4. Note, will not be needed once SDK4 is out of beta
+#if PBL_API_EXISTS(health_service_register_metric_alert)
         case HealthEventMetricAlert:
             APP_LOG(APP_LOG_LEVEL_INFO, "New HealthService HealthEventMetricAlert event");
             break;
+#endif  // HealthEventMetricAlert
+#if PBL_API_EXISTS(health_service_set_heart_rate_sample_period)
         case HealthEventHeartRateUpdate:
             APP_LOG(APP_LOG_LEVEL_INFO, "New HealthService HealthEventHeartRateUpdate event");
             break;
-#endif /* PBL_PLATFORM_DIORITE  */
+#endif // HealthEventHeartRateUpdate
+        // Default is not a good idea, but get switch warnings (about heart events) without it on Basalt/Chalk SDK4 builds
+        default:
+            APP_LOG(APP_LOG_LEVEL_INFO, "New HealthService UNHANDLED event");
+            break;
     }
 }
 
@@ -360,8 +396,101 @@ void cleanup_battery()
 #endif /* DRAW_BATTERY */
 }
 
+#ifdef QUIET_TIME_IMAGE
+BitmapLayer *quiet_time_blayer=NULL;
+GBitmap     *quiet_time_bitmap=NULL;
+
+void handle_quiet_time(void)
+{
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "%s() entry", __func__);
+    if (quiet_time_is_active())
+    {
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "%s() quiet_time_is_active", __func__);
+        bitmap_layer_set_bitmap(quiet_time_blayer, quiet_time_bitmap);
+    }
+    else
+    {
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "%s() quiet_time_is_not_active", __func__);
+        bitmap_layer_set_bitmap(quiet_time_blayer, NULL);
+    }
+
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "%s() exit", __func__);
+}
+
+void setup_quiet_time(Window *window)
+{
+    GRect bounds;
+
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "%s() entry", __func__);
+    quiet_time_bitmap = gbitmap_create_with_resource(QUIET_TIME_IMAGE);
+
+    #ifdef QUIET_TIME_IMAGE_GRECT
+        bounds = QUIET_TIME_IMAGE_GRECT;
+    #else // QUIET_TIME_IMAGE_GRECT
+        // use whole watch screen, auto centered
+        bounds = layer_get_bounds(window_get_root_layer(window));
+    #endif // QUIET_TIME_IMAGE_GRECT
+
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "%s() bounds x=%d, y=%d, w=%d, h=%d", __func__, bounds.origin.x, bounds.origin.y, bounds.size.w, bounds.size.h);
+    quiet_time_blayer = bitmap_layer_create(bounds);
+
+    /* Do not attached image to layer (yet...) */
+    bitmap_layer_set_bitmap(quiet_time_blayer, NULL);
+
+#ifdef PBL_BW
+     bitmap_layer_set_compositing_mode(quiet_time_blayer, GCompOpAssign);
+#elif PBL_COLOR
+     bitmap_layer_set_compositing_mode(quiet_time_blayer, GCompOpSet);
+#endif
+    layer_add_child(window_get_root_layer(main_window), bitmap_layer_get_layer(quiet_time_blayer));
+
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "%s() exit", __func__);
+}
+
+void cleanup_quiet_time(void)
+{
+    /* Destroy GBitmap */
+    if (quiet_time_bitmap)
+    {
+        gbitmap_destroy(quiet_time_bitmap);
+    }
+
+    /* Destroy BitmapLayer */
+    if (quiet_time_blayer)
+    {
+        bitmap_layer_destroy(quiet_time_blayer);
+    }
+}
+#endif // QUIET_TIME_IMAGE
+
+
+#ifndef NO_TEXT_TIME_LAYER
+void setup_text_time(Window *window)
+{
+    // Create time TextLayer
+    time_layer = text_layer_create(CLOCK_POS);
+    text_layer_set_background_color(time_layer, GColorClear);
+    text_layer_set_text_color(time_layer, time_color);
+    text_layer_set_text(time_layer, "00:00");
+
+    // Apply to TextLayer
+    text_layer_set_font(time_layer, time_font);
+    /* Consider GTextAlignmentLeft (with monospaced font) in cases where colon is proportional */
+    text_layer_set_text_alignment(time_layer, TIME_ALIGN);
+
+    // Add it as a child layer to the Window's root layer
+    layer_add_child(window_get_root_layer(window), text_layer_get_layer(time_layer));
+}
+
+void cleanup_text_time()
+{
+    /* Destroy TextLayers */
+    text_layer_destroy(time_layer);
+}
+#endif /* NO_TEXT_TIME_LAYER */
+
 void update_date(struct tm *tick_time) {
-    static char buffer[] = MAX_DATE_STR;  /* FIXME use same buffer, one for both date and time? */
+    static char buffer[] = MAX_DATE_STR;  /* TODO use same buffer, one for both date and time? */
 
     last_day = tick_time->tm_mday;
     strftime(buffer, sizeof(buffer), DATE_FMT_STR, tick_time);
@@ -487,11 +616,9 @@ void cleanup_bt_image()
 }
 #endif /* BT_DISCONNECT_IMAGE_GRECT */
 
-void update_time() {
-    // Get a tm structure
-    time_t    temp = time(NULL);
-    struct tm *tick_time = localtime(&temp);
 
+#ifndef NO_TEXT_TIME_LAYER
+void update_time(struct tm *tick_time) {
     // Create a long-lived buffer
     static char buffer[] = MAX_TIME_STR;
 
@@ -520,10 +647,10 @@ void update_time() {
         // Write the current hours and minutes into the buffer
         if(clock_is_24h_style() == true) {
             // 24h hour format
-            strftime(buffer, sizeof(buffer), "%H:%M", tick_time);
+            strftime(buffer, sizeof(buffer), TIME_FMT_STR_24H, tick_time);
         } else {
             // 12 hour format
-            strftime(buffer, sizeof(buffer), "%I:%M", tick_time); // produces leading zero for hour and minute
+            strftime(buffer, sizeof(buffer), TIME_FMT_STR_12H, tick_time);
         }
     }
 #endif /* DEBUG_TIME */
@@ -531,9 +658,9 @@ void update_time() {
 #ifdef REMOVE_LEADING_ZERO_FROM_TIME
     if(clock_is_24h_style() == false)
     {
-        if (buffer[0] == '0')
+        if (buffer[0] == '0' || buffer[0] == ' ')
         {
-            memmove(&buffer[0], &buffer[1], sizeof(buffer) - 1); // remove leading zero
+            memmove(&buffer[0], &buffer[1], sizeof(buffer) - 1); // remove leading character (really byte)
         }
     }
 #endif /* REMOVE_LEADING_ZERO_FROM_TIME */
@@ -553,10 +680,15 @@ void update_time() {
     update_health();
 #endif /* USE_HEALTH */
 
+#ifdef QUIET_TIME_IMAGE
+    handle_quiet_time();
+#endif // QUIET_TIME_IMAGE
+
 #ifdef DEBUG_TIME_PAUSE
     psleep(DEBUG_TIME_PAUSE);
 #endif /* DEBUG_TIME_PAUSE */
 }
+#endif /* NO_TEXT_TIME_LAYER */
 
 void main_window_load(Window *window) {
     window_set_background_color(window, background_color);
@@ -569,12 +701,6 @@ void main_window_load(Window *window) {
     #endif /* BG_IMAGE_GRECT */
 #endif /* BG_IMAGE */
 
-    // Create time TextLayer
-    time_layer = text_layer_create(CLOCK_POS);
-    text_layer_set_background_color(time_layer, GColorClear);
-    text_layer_set_text_color(time_layer, time_color);
-    text_layer_set_text(time_layer, "00:00");
-
 #ifdef FONT_NAME
     // Create GFont
     time_font = fonts_load_custom_font(resource_get_handle(FONT_NAME));
@@ -582,13 +708,7 @@ void main_window_load(Window *window) {
     time_font = fonts_get_system_font(FONT_SYSTEM_NAME);
 #endif /* FONT_NAME */
 
-    // Apply to TextLayer
-    text_layer_set_font(time_layer, time_font);
-    /* Consider GTextAlignmentLeft (with monospaced font) in cases where colon is proportional */
-    text_layer_set_text_alignment(time_layer, TIME_ALIGN);
-
-    // Add it as a child layer to the Window's root layer
-    layer_add_child(window_get_root_layer(window), text_layer_get_layer(time_layer));
+    SETUP_TIME(window);
 
 #ifndef NO_DATE
     setup_date(window);
@@ -610,8 +730,15 @@ void main_window_load(Window *window) {
     setup_health(window);
 #endif /* USE_HEALTH */
 
+#ifdef QUIET_TIME_IMAGE
+    setup_quiet_time(window);
+#endif // QUIET_TIME_IMAGE
+
     /* Make sure the time is displayed from the start */
-    update_time();
+    // Get a tm structure
+    time_t    temp = time(NULL);
+    struct tm *tick_time = localtime(&temp);
+    update_time(tick_time);
 
 #ifndef NO_BATTERY
     /* Ensure battery status is displayed from the start */
@@ -620,6 +747,11 @@ void main_window_load(Window *window) {
 }
 
 void main_window_unload(Window *window) {
+
+#ifdef QUIET_TIME_IMAGE
+    cleanup_quiet_time();
+#endif // QUIET_TIME_IMAGE
+
 #ifdef USE_HEALTH
     cleanup_health();
 #endif /* USE_HEALTH */
@@ -647,21 +779,23 @@ void main_window_unload(Window *window) {
     cleanup_bg_image();
 #endif /* BG_IMAGE */
 
-    /* Destroy TextLayers */
-    text_layer_destroy(time_layer);
-
+    CLEANUP_TIME();
 
     /* unsubscribe events */
+#ifdef TIME_MACHINE
+    time_machine_tick_timer_service_unsubscribe();
+#else
     tick_timer_service_unsubscribe();
+#endif
 }
 
 void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
-    update_time();
+    update_time(tick_time);
 }
 
 #ifdef DEBUG_TIME
 void debug_tick_handler(struct tm *tick_time, TimeUnits units_changed) {
-    update_time();
+    update_time(tick_time);
 }
 #endif /* DEBUG_TIME */
 
@@ -674,6 +808,7 @@ void in_recv_handler(DictionaryIterator *iterator, void *context)
 {
     Tuple *t=NULL;
     bool wrote_config=false;
+    bool custom_wrote_config=false;
 
     /* NOTE if new entries are added, increase MAX_MESSAGE_SIZE_OUT macro */
 
@@ -710,7 +845,9 @@ void in_recv_handler(DictionaryIterator *iterator, void *context)
         persist_write_int(MESSAGE_KEY_TIME_COLOR, config_time_color);
         wrote_config = true;
         time_color = GColorFromHEX(config_time_color);
+#ifndef NO_TEXT_TIME_LAYER
         text_layer_set_text_color(time_layer, time_color);
+#endif /* NO_TEXT_TIME_LAYER */
 
         if (date_layer) /* or #ifndef NO_DATE */
         {
@@ -736,7 +873,11 @@ void in_recv_handler(DictionaryIterator *iterator, void *context)
     }
     /* NOTE if new entries are added, increase MAX_MESSAGE_SIZE_OUT macro */
 
-    if (wrote_config)
+#ifdef CUSTOM_IN_RECV_HANDLER
+    custom_wrote_config = CUSTOM_IN_RECV_HANDLER(iterator, context);
+#endif /* CUSTOM_IN_RECV_HANDLER */
+
+    if (wrote_config || custom_wrote_config)
     {
         persist_write_int(MESSAGE_KEY_MAJOR_VERSION, major_version);
     }
@@ -786,7 +927,6 @@ void init()
         wipe_config();
     }
 
-#ifdef PBL_COLOR
     /* TODO refactor */
     if (persist_exists(MESSAGE_KEY_TIME_COLOR))
     {
@@ -800,7 +940,6 @@ void init()
         APP_LOG(APP_LOG_LEVEL_INFO, "Read background color: %x", config_background_color);
         background_color = GColorFromHEX(config_background_color);
     }
-#endif /* PBL_COLOR */
 
     if (persist_exists(MESSAGE_KEY_VIBRATE_ON_DISCONNECT))
     {
@@ -821,7 +960,19 @@ void init()
     window_stack_push(main_window, true);
 
     /* Register events; TickTimerService, Battery */
-    tick_timer_service_subscribe(MINUTE_UNIT, TICK_HANDLER);
+#ifdef TIME_MACHINE
+    time_t now = time(NULL);
+    struct tm* time_machine_start = localtime(&now);
+
+    // Override start time to midnight, (local time)
+    time_machine_start->tm_hour = time_machine_start->tm_min = 0;
+
+    time_machine_init(time_machine_start, TIME_MACHINE_MINUTES, 1000);  // accelerate minutes to seconds
+    //time_machine_init(time_machine_start, TIME_MACHINE_HOURS, 1000);  // accelerate hours to seconds
+    time_machine_tick_timer_service_subscribe(TICK_HANDLER_INTERVAL, TICK_HANDLER);
+#else
+    tick_timer_service_subscribe(TICK_HANDLER_INTERVAL, TICK_HANDLER);
+#endif
 #ifdef DEBUG_TIME
     #ifndef DEBUG_TIME_SCREENSHOT
         tick_timer_service_subscribe(SECOND_UNIT, DEBUG_TICK_HANDLER);

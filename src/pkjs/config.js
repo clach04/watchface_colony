@@ -17,6 +17,7 @@ module.exports = [
             },
             {
                 "type": "color",
+                "allowGray": true,
                 "label": "Background",
                 "messageKey": "BACKGROUND_COLOR",
                 "defaultValue": "000000"
@@ -41,6 +42,10 @@ module.exports = [
                 "label": "Vibrate on Bluetooth disconnect",
                 "messageKey": "VIBRATE_ON_DISCONNECT",
                 "defaultValue": false
+            },
+            {
+                "type": "text",
+                "defaultValue": "Will NOT vibrate during Quiet Time or if health monitoring detects sleeping."
             }
         ]
     },
