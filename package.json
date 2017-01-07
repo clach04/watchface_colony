@@ -21,15 +21,14 @@
         "resources": {
             "media": [
                 {
-                    "file": "images/round_bluetooth_disconnect.png",
-                    "name": "IMAGE_BT_DISCONNECT",
+                    "file": "images/icon_25x25.png",
+                    "name": "IMAGE_ICON",
                     "targetPlatforms": null,
                     "type": "bitmap"
                 },
                 {
-                    "file": "images/icon_28x28.png",
-                    "menuIcon": true,
-                    "name": "IMAGE_ICON",
+                    "file": "images/round_bluetooth_disconnect.png",
+                    "name": "IMAGE_BT_DISCONNECT",
                     "targetPlatforms": null,
                     "type": "bitmap"
                 },
