@@ -21,14 +21,14 @@
         "resources": {
             "media": [
                 {
-                    "file": "images/icon_25x25.png",
-                    "name": "IMAGE_ICON",
+                    "file": "images/round_bluetooth_disconnect.png",
+                    "name": "IMAGE_BT_DISCONNECT",
                     "targetPlatforms": null,
                     "type": "bitmap"
                 },
                 {
-                    "file": "images/round_bluetooth_disconnect.png",
-                    "name": "IMAGE_BT_DISCONNECT",
+                    "file": "images/icon_25x25.png",
+                    "name": "IMAGE_ICON",
                     "targetPlatforms": null,
                     "type": "bitmap"
                 },
@@ -44,7 +44,8 @@
         "targetPlatforms": [
             "aplite",
             "basalt",
-            "chalk"
+            "chalk",
+            "diorite"
         ],
         "uuid": "667fc060-d995-4eb5-bbe5-eb92aa3e4799",
         "watchapp": {
