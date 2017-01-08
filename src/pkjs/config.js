@@ -24,7 +24,7 @@ module.exports = [
             },
             {
                 "type": "color",
-                "allowGray": true,
+                "allowGray": false,
                 "label": "Foreground",
                 "messageKey": "TIME_COLOR",
                 "defaultValue": "FFFFFF"
