@@ -21,6 +21,9 @@
 #define MAX_DATE_STR "Thu\n00\nAug"  /* if custom version of DATE_FMT_STR is set, MAX_DATE_STR  needs to be updated too */
 //#define NO_DATE
 
+#define QUIET_TIME_IMAGE RESOURCE_ID_IMAGE_QUIET_TIME
+#define QUIET_TIME_IMAGE_GRECT GRect(100, 4, 14, 14)  // 14x14 image
+
 #define DRAW_BATTERY
 //#define DRAW_SMALL_BATTERY
 
